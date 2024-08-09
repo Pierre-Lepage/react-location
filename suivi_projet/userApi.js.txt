@@ -1,5 +1,6 @@
+
 import axios from 'axios';
-const API_URL  = "http://10.21.6.19/API/utilisateurs";
+const API_URL  = "http://81.251.199.219:41235/API/utilisateurs";
 
 export function getUserApi() {
   return axios.get(API_URL)

@@ -1,0 +1,124 @@
+Certainly! I'll guide you through using mongosh to view and interact with your MongoDB data. Here's a step-by-step process:
+
+
+
+
+
+# Viewing MongoDB Data with mongosh
+
+1. Connect to MongoDB:
+   ```
+   mongosh
+   ```
+
+2. List all databases:
+   ```
+   show dbs
+   ```
+
+3. Switch to a specific database:
+   ```
+   use yourDatabaseName
+   ```
+
+4. List all collections in the current database:
+   ```
+   show collections
+   ```
+
+5. View all documents in a collection:
+   ```
+   db.yourCollectionName.find()
+   ```
+
+6. View documents in a more readable format:
+   ```
+   db.yourCollectionName.find().pretty()
+   ```
+
+7. Count documents in a collection:
+   ```
+   db.yourCollectionName.countDocuments()
+   ```
+
+8. Find specific documents (example):
+   ```
+   db.yourCollectionName.find({ field: "value" })
+   ```
+
+9. Limit the number of results:
+   ```
+   db.yourCollectionName.find().limit(5)
+   ```
+
+10. Sort results (1 for ascending, -1 for descending):
+    ```
+    db.yourCollectionName.find().sort({ field: 1 })
+    ```
+
+11. Exit mongosh:
+    ```
+    exit
+    ```
+
+Remember to replace `yourDatabaseName` and `yourCollectionName` with your actual database and collection names.
+
+
+Now, let's go through these steps:
+
+1. Open your terminal and start mongosh by typing:
+   ```
+   mongosh
+   ```
+
+2. Once connected, you can see all the databases by typing:
+   ```
+   show dbs
+   ```
+
+3. To switch to a specific database, use:
+   ```
+   use yourDatabaseName
+   ```
+   Replace `yourDatabaseName` with the name of your database.
+
+4. To see all collections in the current database:
+   ```
+   show collections
+   ```
+
+5. To view all documents in a specific collection:
+   ```
+   db.yourCollectionName.find()
+   ```
+   Replace `yourCollectionName` with the name of your collection.
+
+6. For a more readable format, you can use:
+   ```
+   db.yourCollectionName.find().pretty()
+   ```
+
+7. If you want to count the number of documents in a collection:
+   ```
+   db.yourCollectionName.countDocuments()
+   ```
+
+8. To find specific documents, you can use queries. For example:
+   ```
+   db.yourCollectionName.find({ name: "John Doe" })
+   ```
+
+9. You can limit the number of results:
+   ```
+   db.yourCollectionName.find().limit(5)
+   ```
+
+10. And sort the results:
+    ```
+    db.yourCollectionName.find().sort({ name: 1 })
+    ```
+    Use 1 for ascending order and -1 for descending order.
+
+Remember, replace `yourDatabaseName` and `yourCollectionName` with your actual database and collection names.
+
+Is there a specific database or collection you're trying to view? Or do you need help understanding any of these commands?
