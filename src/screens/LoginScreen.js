@@ -1,82 +1,45 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-} from "react-native";
-import axios from "axios";
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { useAuth } from '../context/AuthContext';
+import { authStyles } from '../styles/authStyles';
 
 export default function LoginScreen({ navigation }) {
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { login } = useAuth();
 
-  const handleChange = (name, value) => {
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = async () => {
+  const handleLogin = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/auth/login",
-        formData
-      );
-      if (response.status === 200) {
-        // Stocker le token JWT et les informations utilisateur
-        // Vous pouvez utiliser AsyncStorage ou Context API pour gérer l'état de l'utilisateur
-        navigation.navigate("Profile");
-      }
+      await login(email, password);
     } catch (error) {
-      console.error(error);
+      Alert.alert('Erreur de connexion', error.message);
     }
   };
 
   return (
-    <View style={styles.container}>
+    <View style={authStyles.container}>
+      <Text style={authStyles.title}>Connexion</Text>
       <TextInput
+        style={authStyles.input}
         placeholder="Email"
-        value={formData.email}
-        onChangeText={(text) => handleChange("email", text)}
-        style={styles.input}
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
       />
       <TextInput
-        placeholder="Password"
-        value={formData.password}
-        onChangeText={(text) => handleChange("password", text)}
+        style={authStyles.input}
+        placeholder="Mot de passe"
+        value={password}
+        onChangeText={setPassword}
         secureTextEntry
-        style={styles.input}
       />
-      <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-        <Text style={styles.buttonText}>Login</Text>
+      <TouchableOpacity style={authStyles.button} onPress={handleLogin}>
+        <Text style={authStyles.buttonText}>Se connecter</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => navigation.navigate("Register")}
-        style={styles.button}
-      >
-        <Text style={styles.buttonText}>Don't have an account? Register</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+        <Text style={authStyles.link}>Pas de compte ? S'inscrire</Text>
       </TouchableOpacity>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 16,
-  },
-  input: {
-    borderWidth: 1,
-    padding: 8,
-    marginBottom: 8,
-  },
-  button: {
-    backgroundColor: "#007bff",
-    padding: 12,
-    alignItems: "center",
-    marginVertical: 5,
-  },
-  buttonText: {
-    color: "#fff",
-  },
-});

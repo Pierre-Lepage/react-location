@@ -1,90 +1,67 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-} from "react-native";
-import axios from "axios";
+// src/screens/RegisterScreen.js
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { useAuth } from '../context/AuthContext';
+import { authStyles } from '../styles/authStyles';
 
 export default function RegisterScreen({ navigation }) {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const { register } = useAuth();
 
-  const handleChange = (name, value) => {
-    setFormData({ ...formData, [name]: value });
-  };
+  const handleRegister = async () => {
+    if (password !== confirmPassword) {
+      Alert.alert("Erreur", "Les mots de passe ne correspondent pas.");
+      return;
+    }
 
-  const handleSubmit = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/auth/register",
-        formData
-      );
-      if (response.status === 201) {
-        navigation.navigate("Login");
-      }
+      await register(name, email, password);
+      // La navigation se fera automatiquement grâce à AppNavigator
     } catch (error) {
-      console.error(error);
+      Alert.alert("Erreur d'inscription", error.message);
     }
   };
 
   return (
-    <View style={styles.container}>
+    <View style={authStyles.container}>
+      <Text style={authStyles.title}>Inscription</Text>
       <TextInput
-        placeholder="Name"
-        value={formData.name}
-        onChangeText={(text) => handleChange("name", text)}
-        style={styles.input}
+        style={authStyles.input}
+        placeholder="Nom"
+        value={name}
+        onChangeText={setName}
       />
       <TextInput
+        style={authStyles.input}
         placeholder="Email"
-        value={formData.email}
-        onChangeText={(text) => handleChange("email", text)}
-        style={styles.input}
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
       />
       <TextInput
-        placeholder="Password"
-        value={formData.password}
-        onChangeText={(text) => handleChange("password", text)}
+        style={authStyles.input}
+        placeholder="Mot de passe"
+        value={password}
+        onChangeText={setPassword}
         secureTextEntry
-        style={styles.input}
       />
-      <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-        <Text style={styles.buttonText}>Register</Text>
+      <TextInput
+        style={authStyles.input}
+        placeholder="Confirmer le mot de passe"
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+        secureTextEntry
+      />
+      <TouchableOpacity style={authStyles.button} onPress={handleRegister}>
+        <Text style={authStyles.buttonText}>S'inscrire</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => navigation.navigate("Login")}
-        style={styles.button}
-      >
-        <Text style={styles.buttonText}>Already have an account? Login</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+        <Text style={authStyles.link}>Déjà un compte ? Se connecter</Text>
       </TouchableOpacity>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 16,
-  },
-  input: {
-    borderWidth: 1,
-    padding: 8,
-    marginBottom: 8,
-  },
-  button: {
-    backgroundColor: "#007bff",
-    padding: 12,
-    alignItems: "center",
-    marginVertical: 5,
-  },
-  buttonText: {
-    color: "#fff",
-  },
-});
